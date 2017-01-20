@@ -26,7 +26,9 @@ Then run the following commands to bootstrap your environment ::
     git clone https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
     cd {{cookiecutter.app_name}}
     pip install -r requirements/dev.txt
-    bower install
+    cd static
+    npm install
+    cd ..
     flask run
 
 You will see a pretty welcome screen.
@@ -34,6 +36,8 @@ You will see a pretty welcome screen.
 Once you have installed your DBMS, run the following to create your app's
 database tables and perform the initial migration ::
 
+    createuser -s {{cookiecutter.app_name}} -W # use the password {{cookiecutter.app_name}}123
+    flask setup_db
     flask db init
     flask db migrate
     flask db upgrade

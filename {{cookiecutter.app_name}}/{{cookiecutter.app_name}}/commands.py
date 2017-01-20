@@ -6,6 +6,7 @@ from subprocess import call
 
 import click
 from flask import current_app
+from flask_sqlalchemy import sqlalchemy
 from flask.cli import with_appcontext
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 
@@ -59,6 +60,27 @@ def clean():
                 full_pathname = os.path.join(dirpath, filename)
                 click.echo('Removing {}'.format(full_pathname))
                 os.remove(full_pathname)
+
+
+@click.command()
+@with_appcontext
+def setup_db():
+    """Create the database and the test database."""
+    (base_uri, local_db) = \
+        current_app.config['SQLALCHEMY_DATABASE_URL'].rsplit('/', 1)
+    engine = sqlalchemy.create_engine('/'.join([base_uri, "postgres"]))
+    conn = engine.connect()
+    conn.execute('commit')
+    # The dbname part of the database URI for the selected configuration.
+    click.echo('Creating Development database %s...' % (repr(local_db),))
+    conn.execute("create database %s" % local_db)
+    conn.execute('commit')
+    # By convention, the name as the normal db but with "_test" appended.
+    test_db = local_db + "_test"
+    click.echo('Creating Test database %s...' %
+               (repr(test_db),))
+    conn.execute("create database %s" % test_db)
+    conn.close()
 
 
 @click.command()
