@@ -15,6 +15,9 @@ class Config(object):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format('{{cookiecutter.app_name}}',
+                                                                   '{{cookiecutter.app_name}}123',
+                                                                   'localhost', '5432', '{{cookiecutter.app_name}}')
 
 
 class ProdConfig(Config):
@@ -31,10 +34,7 @@ class DevConfig(Config):
 
     ENV = 'dev'
     DEBUG = True
-    DB_NAME = 'dev.db'
     # Put the db file in project root
-    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
     DEBUG_TB_ENABLED = True
     ASSETS_DEBUG = True  # Don't bundle/minify static assets
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
@@ -45,6 +45,9 @@ class TestConfig(Config):
 
     TESTING = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
     BCRYPT_LOG_ROUNDS = 4  # For faster tests; needs at least 4 to avoid "ValueError: Invalid rounds"
     WTF_CSRF_ENABLED = False  # Allows form testing
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format('{{cookiecutter.app_name}}',
+                                                                   '{{cookiecutter.app_name}}123',
+                                                                   'localhost', '5432',
+                                                                   '{{cookiecutter.app_name}}_test')

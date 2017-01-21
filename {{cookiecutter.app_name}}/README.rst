@@ -15,7 +15,14 @@ add the following to ``.bashrc`` or ``.bash_profile``.
 
     export {{cookiecutter.app_name | upper}}_SECRET='something-really-secret'
 
-Before running shell commands, set the ``FLASK_APP`` and ``FLASK_DEBUG``
+Before running shell commands, setup your environment by running ::
+
+  sh setup.sh
+
+
+Alternatively, run the commands manually with the following steps:
+
+Set the ``FLASK_APP`` and ``FLASK_DEBUG``
 environment variables ::
 
     export FLASK_APP=/path/to/autoapp.py
@@ -26,9 +33,7 @@ Then run the following commands to bootstrap your environment ::
     git clone https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
     cd {{cookiecutter.app_name}}
     pip install -r requirements/dev.txt
-    cd static
-    npm install
-    cd ..
+    bower install
     flask run
 
 You will see a pretty welcome screen.
